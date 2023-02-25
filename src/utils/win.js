@@ -1,5 +1,14 @@
 module.exports = (o, n) => {
-  const w = new (require('electron').BrowserWindow)({
+  //require('electron').BrowserWindow
+  const {BrowserWindow} = require("electron-acrylic-window");
+  const options = {
+    theme: 'appearance-based',
+    effect: 'acrylic',
+    useCustomWindowRefreshMethod: true,
+    maximumRefreshRate: 144,
+    disableOnBlur: true
+  };
+  const w = new BrowserWindow({
     frame: false,
     resizable: false,
     center: true,
@@ -7,6 +16,7 @@ module.exports = (o, n) => {
     webPreferences: {
       preload: require('path').join(__dirname, '..', n, 'preload.js')
     },
+    vibrancy: [options],
     ...o
   });
 
@@ -18,6 +28,6 @@ module.exports = (o, n) => {
   });
 
   w.loadURL('https://cdn.openasar.dev/' + n + '?v=' + oaVersion);
-
+  w.webContents.insertCSS(`html, body { background: transparent !important; }`);
   return w;
 };
